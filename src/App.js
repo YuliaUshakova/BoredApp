@@ -1,21 +1,19 @@
 import { useState, useEffect } from 'react';
+import video from './mood.mp4';
 import './App.css';
+
 
 function App() {
 
   const [advice, setAdvice] = useState("");
 
-  const getAdvice = (e) => {
-    e.prevent.default(e);
-  getAdvice(setAdvice);
+  const getAdvice = async () => {
+      const response = await fetch(`http://www.boredapi.com/api/activity/`);
+      const data = await response.json();
+      setAdvice(data.activity)
 }
 
   useEffect(() => {
-    const getAdvice = async() => {
-    const response = await fetch(`http://www.boredapi.com/api/activity/`);
-    const data = await response.json();
-    setAdvice(data.activity)
-    }
     getAdvice();
   }, [])
 
@@ -25,17 +23,20 @@ function App() {
   return (
     <div className="App">
       <div className="container">
-        <h2> Are you bored?</h2>
-        <h2>Hit this button for ideas</h2>
+        <video autoPlay muted loop>
+          <source src={video} type="video/mp4" />
+        </video>
+        <p>Feeling bored?</p>
+        <p>Hit this button for more ideas</p>
         </div>
 
         <div className="container">
-          <button onClick={getAdvice}><img src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/64/000000/external-idea-achievements-flaticons-lineal-color-flat-icons.png" alt="lihgtbulb"/></button>
+          <button onClick={getAdvice}><img src="https://img.icons8.com/fluency/48/000000/idea.png" alt="lihgtbulb"/></button>
         </div>
-        <div className="container">
-        <p>{setAdvice}</p>
+        <div className="container advice">
+        <h2>{advice}</h2>
         </div>
-      </div>
+    </div>
   );
 }
 
